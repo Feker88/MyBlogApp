@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CodePulse.API/CodePulse.API.csproj" />
+  <Project Path="CodePulse.Application/CodePulse.Application.csproj" />
+  <Project Path="CodePulse.Domain/CodePulse.Domain.csproj" />
+</Solution>
