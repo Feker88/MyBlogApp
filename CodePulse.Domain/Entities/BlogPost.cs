@@ -12,6 +12,7 @@ public class BlogPost : BaseEntity
     private string author = string.Empty;
     private bool isVisible;
     private bool isCreated;
+   
 
     public BlogPost()
     {
