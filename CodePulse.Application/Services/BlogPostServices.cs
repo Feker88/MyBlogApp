@@ -21,9 +21,9 @@ namespace CodePulse.Application.Services
 
         public BlogPostServices(ICategoryRepository categoryRepository, IBlogPostRepository blogPostRepository, IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
-            _blogPostRepository = blogPostRepository;
-            _unitOfWork = unitOfWork;
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            _blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
       /// <summary>

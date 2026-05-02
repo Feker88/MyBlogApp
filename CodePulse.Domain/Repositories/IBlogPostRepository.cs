@@ -30,7 +30,8 @@ namespace CodePulse.Domain.Repositories
         /// <summary>
         /// Gets all blog posts within a specified date range.
         /// </summary>
-        /// <param name="dateRange">The date to filter posts by.</param>
+        /// <param name="minDateRange">The start date of the range to filter posts by.</param>
+        /// <param name="maxDateRange">The end date of the range to filter posts by.</param>
         /// <returns>A collection of blog posts created within the specified date range.</returns>
         Task<IEnumerable<BlogPost>> GetPostByDateRangeAsync(DateTime minDateRange, DateTime maxDateRange);
 
