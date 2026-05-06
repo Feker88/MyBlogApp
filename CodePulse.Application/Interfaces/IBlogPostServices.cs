@@ -1,4 +1,6 @@
-﻿using CodePulse.Domain.Entities;
+﻿using CodePulse.Application.DTOs;
+using CodePulse.Application.DTOs.BlogPost;
+using CodePulse.Domain.Entities;
 
 namespace CodePulse.Application.Interfaces
 {
@@ -20,7 +22,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="categoryId">The unique identifier of the category for which to retrieve blog posts.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
         /// associated with the specified category. The collection is empty if no posts are found for the category.</returns>
-        public Task<IEnumerable<BlogPost>> GetPostsByCategoryAsync(Guid categoryId);
+        public Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByCategoryAsync(Guid categoryId);
 
         /// <summary>
         /// Asynchronously retrieves all blog posts authored by the specified author.
@@ -28,7 +30,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="author">The name of the author whose blog posts are to be retrieved. Cannot be null or empty.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
         /// written by the specified author. The collection is empty if the author has no posts.</returns>
-        Task<IEnumerable<BlogPost>> GetPostsByAuthor(string author);
+        Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByAuthor(string author);
 
         /// <summary>
         /// Asynchronously retrieves all blog posts published within the specified date range.
@@ -37,7 +39,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="endDate">The end date of the range. Only posts created on or before this date are included.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
         /// created within the specified date range. The collection is empty if no posts are found.</returns>
-        Task<IEnumerable<BlogPost>> GetPostsByDateRange(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByDateRange(DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Asynchronously retrieves all blog posts whose title or content contains the specified search term.
@@ -45,7 +47,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="searchTerm">The text to search for within the title or content of blog posts. The search is case-insensitive. Cannot be null or empty.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts that
         /// match the search criteria. The collection is empty if no posts are found.</returns>
-        Task<IEnumerable<BlogPost>> GetPostsByTitleOrContent(string searchTerm);
+        Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByTitleOrContent(string searchTerm);
 
         /// <summary>
         /// Asynchronously updates an existing blog post and persists the changes to the data store.
@@ -53,7 +55,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="post">The blog post entity containing the updated values. Must not be null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the updated blog post entity as stored
         /// in the data store.</returns>
-        Task<BlogPost> UpdatePostAsync(BlogPost post);
+        Task<BlogPostDTO> UpdatePostAsync(UpdateBlogPostDTO post);
 
         /// <summary>
         /// Asynchronously deletes a blog post identified by the specified unique identifier.
@@ -69,6 +71,6 @@ namespace CodePulse.Application.Interfaces
         /// <param name="post">The blog post to create. Must not be null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the created blog post, including
         /// any updates made during persistence (such as generated identifiers and timestamps).</returns>
-        Task<BlogPost> CreatePostAsync(BlogPost post);
+        Task<BlogPostDTO> CreatePostAsync(CreateBlogPostDTO post);
     }
 }

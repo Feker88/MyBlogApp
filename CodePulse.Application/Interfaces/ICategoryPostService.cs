@@ -1,4 +1,5 @@
-﻿using CodePulse.Domain.Entities;
+﻿using CodePulse.Application.DTOs.CategoryPost;
+using CodePulse.Domain.Entities;
 
 namespace CodePulse.Application.Interfaces;
 
@@ -19,7 +20,7 @@ public interface ICategoryPostService
     /// <param name="category">The blog category to create. Must not be null.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the created blog category, including
     /// any updates made during persistence (such as generated identifiers and timestamps).</returns>
-    Task<BlogCategory> CreateCategoryAsync(BlogCategory category);
+    Task<CategoryPostDto> CreateCategoryAsync(CreateCategoryPostDto category);
 
     /// <summary>
     /// Asynchronously retrieves a blog category by its unique identifier.
@@ -27,7 +28,7 @@ public interface ICategoryPostService
     /// <param name="id">The unique identifier of the blog category to retrieve.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the blog category if found;
     /// otherwise, null.</returns>
-    Task<BlogCategory?> GetCategoryByIdAsync(Guid id);
+    Task<CategoryPostDto?> GetCategoryByIdAsync(Guid id);
 
     /// <summary>
     /// Asynchronously retrieves a blog category by its URL handle.
@@ -35,14 +36,14 @@ public interface ICategoryPostService
     /// <param name="urlHandle">The URL-friendly identifier for the category.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the blog category if found;
     /// otherwise, null.</returns>
-    Task<BlogCategory?> GetCategoryByUrlHandleAsync(string urlHandle);
+    Task<CategoryPostDto?> GetCategoryByUrlHandleAsync(string urlHandle);
 
     /// <summary>
     /// Asynchronously retrieves all blog categories from the data store.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The task result contains a collection of all blog categories.
     /// The collection is empty if no categories are found.</returns>
-    Task<IEnumerable<BlogCategory>> GetAllCategoriesAsync();
+    Task<IEnumerable<CategoryPostDto>> GetAllCategoriesAsync();
 
     /// <summary>
     /// Asynchronously updates an existing blog category and persists the changes to the data store.
@@ -50,7 +51,7 @@ public interface ICategoryPostService
     /// <param name="category">The blog category entity containing the updated values. Must not be null.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the updated blog category entity as
     /// stored in the data store.</returns>
-    Task<BlogCategory> UpdateCategoryAsync(BlogCategory category);
+    Task<CategoryPostDto> UpdateCategoryAsync(UpdateCategoryPostDto category);
 
     /// <summary>
     /// Asynchronously deletes a blog category identified by the specified unique identifier.
@@ -66,7 +67,7 @@ public interface ICategoryPostService
     /// <param name="searchTerm">The search term to look for in category names. The search is case-insensitive.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog categories that
     /// match the search criteria. The collection is empty if no categories are found.</returns>
-    Task<IEnumerable<BlogCategory>> SearchCategoriesAsync(string searchTerm);
+    Task<IEnumerable<CategoryPostDto>> SearchCategoriesAsync(string searchTerm);
 
     /// <summary>
     /// Asynchronously checks if a blog category with the specified URL handle already exists.
