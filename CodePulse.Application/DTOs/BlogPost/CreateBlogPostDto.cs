@@ -4,6 +4,9 @@ using System.Text;
 
 namespace CodePulse.Application.DTOs.BlogPost
 {
+    /// <summary>
+    /// class representing a data transfer object (DTO) for creating a new blog post, used for the request DTO when creating a new blog post.
+    /// </summary>
     public class CreateBlogPostDTO : BaseDto
     {
         public required string Title { get; set; } = string.Empty;

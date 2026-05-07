@@ -4,7 +4,11 @@ using System.Text;
 
 namespace CodePulse.Application.DTOs.BlogPost
 {
-    public  class BlogPostSummaryDTO : BaseDto
+    /// <summary>
+    /// class representing a data transfer object (DTO) for a blog post summary, 
+    /// used for as the response DTO when listing blog posts, containing only summary information without the full content of the post.
+    /// </summary>
+    public class BlogPostSummaryDTO : BaseDto
     {
         public required string Title { get; set; }
         

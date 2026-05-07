@@ -22,7 +22,7 @@ namespace CodePulse.Application.Interfaces
         /// <param name="categoryId">The unique identifier of the category for which to retrieve blog posts.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
         /// associated with the specified category. The collection is empty if no posts are found for the category.</returns>
-        public Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByCategoryAsync(Guid categoryId);
+        Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByCategoryAsync(Guid categoryId);
 
         /// <summary>
         /// Asynchronously retrieves all blog posts authored by the specified author.

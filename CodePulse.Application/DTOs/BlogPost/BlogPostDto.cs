@@ -4,10 +4,12 @@ using System.Text;
 
 namespace CodePulse.Application.DTOs.BlogPost
 {
-    public  class BlogPostDTO : BaseDto
-    {
 
-    
+    /// <summary>
+    /// class representing a data transfer object (DTO) for a blog post, used for as the response DTO.
+    /// </summary>
+    public class BlogPostDTO : BaseDto
+    {
         public required  string Title { get; set; }
         public required  string Content { get; set; }  
         public required string ShortDescription { get; set; }

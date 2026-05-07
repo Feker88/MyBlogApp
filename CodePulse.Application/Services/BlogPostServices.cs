@@ -1,4 +1,6 @@
-﻿using CodePulse.Application.Interfaces;
+﻿using AutoMapper;
+using CodePulse.Application.DTOs.BlogPost;
+using CodePulse.Application.Interfaces;
 using CodePulse.Domain.Entities;
 using CodePulse.Domain.Repositories;
 using System;
@@ -12,38 +14,49 @@ namespace CodePulse.Application.Services
     /// Orchestrates repositories and the unit of work for post operations.
     /// </summary>
 
-    public class BlogPostServices : ApplicationService 
+    public class BlogPostServices : ApplicationService , IBlogPostServices
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
 
-        public BlogPostServices(ICategoryRepository categoryRepository, IBlogPostRepository blogPostRepository, IUnitOfWork unitOfWork)
+        public BlogPostServices(ICategoryRepository categoryRepository, 
+                                IBlogPostRepository blogPostRepository, 
+                                IUnitOfWork unitOfWork,
+                                IMapper mapper)
         {
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             _blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-      /// <summary>
-      /// Asynchronously retrieves all blog posts that belong to the specified category.
-      /// </summary>
-      /// <param name="categoryId">The unique identifier of the category for which to retrieve blog posts.</param>
-      /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
-      /// associated with the specified category. The collection is empty if no posts are found.</returns>
-        public Task<IEnumerable<BlogPost>> GetPostsByCategoryAsync(Guid categoryId) => _blogPostRepository.GetPostsByCategoryAsync(categoryId);
-
-
-      
+        /// <summary>
+        /// Asynchronously retrieves all blog posts that belong to the specified category.
+        /// </summary>
+        /// <param name="categoryId">The unique identifier of the category for which to retrieve blog posts.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
+        /// associated with the specified category. The collection is empty if no posts are found.</returns>
+        public async Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByCategoryAsync(Guid categoryId)
+        {
+          var entities =   _blogPostRepository.GetPostsByCategoryAsync(categoryId);
+            return _mapper.Map<IEnumerable<BlogPostSummaryDTO>>(entities);
+        }
+             
         /// <summary>
         /// Asynchronously retrieves all blog posts authored by the specified author.
         /// </summary>
         /// <param name="author">The name of the author whose blog posts are to be retrieved. Cannot be null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
         /// written by the specified author. The collection is empty if the author has no posts.</returns>
-        public Task<IEnumerable<BlogPost>> GetPostsByAuthor(string author) => _blogPostRepository.GetPostByAuthorAsync(author);
-
+        public async Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByAuthor(string author)
+        {
+            var entities = _blogPostRepository.GetPostByAuthorAsync(author);
+            return _mapper.Map<IEnumerable<BlogPostSummaryDTO>>(entities);
+          
+        }
        /// <summary>
        /// Asynchronously retrieves all blog posts published within the specified date range.
        /// </summary>
@@ -51,8 +64,13 @@ namespace CodePulse.Application.Services
        /// <param name="endDate">The end date of the range. Only posts published on or before this date are included.</param>
        /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts
        /// published within the specified date range. The collection is empty if no posts are found.</returns>
-        public Task<IEnumerable<BlogPost>> GetPostsByDateRange(DateTime startDate, DateTime endDate) => _blogPostRepository.GetPostByDateRangeAsync(startDate, endDate);
+        public async  Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            var entities = _blogPostRepository.GetPostByDateRangeAsync(startDate, endDate);
+            return _mapper.Map<IEnumerable<BlogPostSummaryDTO>>(entities);
+        }
 
+        
         /// <summary>
         /// Asynchronously retrieves all blog posts whose title or content contains the specified search term.
         /// </summary>
@@ -60,8 +78,11 @@ namespace CodePulse.Application.Services
         /// null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a collection of blog posts that
         /// match the search criteria. The collection is empty if no posts are found.</returns>
-        public Task<IEnumerable<BlogPost>> GetPostsByTitleOrContent(string searchTerm) => _blogPostRepository.SearchPostByTitleOrContent(searchTerm);
-
+        public async Task<IEnumerable<BlogPostSummaryDTO>> GetPostsByTitleOrContent(string searchTerm) 
+        {
+            var entities = _blogPostRepository.SearchPostByTitleOrContent(searchTerm);
+            return _mapper.Map<IEnumerable<BlogPostSummaryDTO>>(entities);
+        }
 
 
         /// <summary>
@@ -70,12 +91,14 @@ namespace CodePulse.Application.Services
         /// <param name="post">The blog post entity containing the updated values. Must not be null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the updated blog post entity as stored
         /// in the data store.</returns>
-        public async Task<BlogPost> UpdatePostAsync(BlogPost post)
+        public async Task<BlogPostDTO> UpdatePostAsync(UpdateBlogPostDTO post)
         {
+            var entity = _mapper.Map<BlogPost>(post);
 
-            var updated = await _blogPostRepository.UpdateAsync(post);
+            var updated = await _blogPostRepository.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            return updated;
+
+            return _mapper.Map<BlogPostDTO>(updated);
         }
         /// <summary>
         /// Asynchronously deletes a blog post identified by the specified unique identifier.
@@ -85,6 +108,7 @@ namespace CodePulse.Application.Services
         /// post was successfully deleted; otherwise, <see langword="false"/>.</returns>
         public async Task<bool> DeletePostAsync(Guid id)
         {
+
             var result = await _blogPostRepository.DeleteAsync(id);
             if (result)
                 await _unitOfWork.SaveChangesAsync();
@@ -96,11 +120,14 @@ namespace CodePulse.Application.Services
         /// <param name="post">The blog post to create. Must not be null.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the created blog post, including
         /// any updates made during persistence (such as generated identifiers).</returns>
-        public async Task<BlogPost> CreatePostAsync(BlogPost post)
+        public async Task<BlogPostDTO> CreatePostAsync(CreateBlogPostDTO post)
         {
-            var created = await _blogPostRepository.AddAsync(post);
+            var entity = _mapper.Map<BlogPost>(post);
+
+            var created = await _blogPostRepository.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            return created;
+
+            return _mapper.Map<BlogPostDTO>(created);
         }
 
     }

@@ -1,9 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using AutoMapper;
+using CodePulse.Application.DTOs.BlogPost;
+using CodePulse.Application.DTOs.CategoryPost;
 using CodePulse.Application.Interfaces;
 using CodePulse.Domain.Entities;
 using CodePulse.Domain.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CodePulse.Application.Services;
 
@@ -11,47 +14,68 @@ namespace CodePulse.Application.Services;
 /// Application service that implements use-cases related to categories and the posts within them.
 /// Orchestrates repositories and the unit of work for category-post operations.
 /// </summary>
-public class CategoryPostService : ApplicationService
+public class CategoryPostService : ApplicationService, ICategoryPostService
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IBlogPostRepository _blogPostRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
     public CategoryPostService(
         ICategoryRepository categoryRepository,
         IBlogPostRepository blogPostRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IMapper mapper)
     {
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         _blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _mapper= mapper?? throw new ArgumentNullException(nameof(mapper));
     }
 
     // Create a new category
-    public async Task<BlogCategory> CreateCategoryAsync(BlogCategory category)
-    {
-        var created = await _categoryRepository.AddAsync(category);
+    public async Task<CategoryPostDto> CreateCategoryAsync(CreateCategoryPostDto category)
+    {        
+        var entity = _mapper.Map<BlogCategory>(category);
+        var created = await _categoryRepository.AddAsync(entity);
         await _unitOfWork.SaveChangesAsync();
-        return created;
+        return _mapper.Map<CategoryPostDto>(created);
     }
 
     // Get category by id
-    public Task<BlogCategory?> GetCategoryByIdAsync(Guid id) => _categoryRepository.GetByIdAsync(id);
+    public async Task<CategoryPostDto?> GetCategoryByIdAsync(Guid id)
+    {
+        var entity = _categoryRepository.GetByIdAsync(id);
+        return _mapper.Map<CategoryPostDto>(entity);
+    }
 
     // Get category by url handle
-    public Task<BlogCategory?> GetCategoryByUrlHandleAsync(string urlHandle) => _categoryRepository.GetByUrlHandleAsync(urlHandle);
+    public  async Task<CategoryPostDto?> GetCategoryByUrlHandleAsync(string urlHandle)
+    {
+        var entity = _categoryRepository.GetByUrlHandleAsync(urlHandle);
+        return _mapper.Map<CategoryPostDto>(entity);
+    }
+        
 
     // Get all categories
-    public Task<IEnumerable<BlogCategory>> GetAllCategoriesAsync() => _categoryRepository.GetAllAsync();
+    public async  Task<IEnumerable<CategoryPostDto>> GetAllCategoriesAsync()
+    {
+        var entities = _categoryRepository.GetAllAsync();
+        return _mapper.Map<IEnumerable<CategoryPostDto>>(entities);
+    }
+    
 
    
-
     // Update category
-    public async Task<BlogCategory> UpdateCategoryAsync(BlogCategory category)
+    public async Task<CategoryPostDto> UpdateCategoryAsync(CreateCategoryPostDto category)
     {
-        var updated = await _categoryRepository.UpdateAsync(category);
+
+        var entity = _mapper.Map<BlogCategory>(category);
+
+        var updated= await _categoryRepository.UpdateAsync(entity);
         await _unitOfWork.SaveChangesAsync();
-        return updated;
+
+        return _mapper.Map<CategoryPostDto>(updated);
     }
 
     // Delete category
@@ -64,11 +88,15 @@ public class CategoryPostService : ApplicationService
     }
 
     // Search categories by name
-    public Task<IEnumerable<BlogCategory>> SearchCategoriesAsync(string searchTerm) => _categoryRepository.SearchByNameAsync(searchTerm);
+    public async  Task<IEnumerable<CategoryPostDto>> SearchCategoriesAsync(string searchTerm)
+    {
+            var entities = _categoryRepository.SearchByNameAsync(searchTerm);
+        return _mapper.Map<IEnumerable<CategoryPostDto>>(entities);
+    }
 
     // Check if url handle exists
-    public Task<bool> CategoryUrlHandleExistsAsync(string urlHandle) => _categoryRepository.ExistsByUrlHandleAsync(urlHandle);
+    public  Task<bool> CategoryUrlHandleExistsAsync(string urlHandle) => _categoryRepository.ExistsByUrlHandleAsync(urlHandle);
 
     // Check if name exists
-    public Task<bool> CategoryNameExistsAsync(string name) => _categoryRepository.ExistsByNameAsync(name);
+    public  Task<bool> CategoryNameExistsAsync(string name) => _categoryRepository.ExistsByNameAsync(name);
 }
