@@ -20,11 +20,13 @@ namespace CodePulse.Application.Mappers
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
 
             /// UpdateCategoryPostDto → BlogCategory entity
-            /// Ignore timestamps — only Id comes from the DTO
-             
-             CreateMap<UpdateCategoryPostDto, BlogCategory>()
-            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+            /// Ignore timestamps, UrlHandle — only Id comes from the DTO
+
+            CreateMap<UpdateCategoryPostDto, BlogCategory>()
+           .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+           .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+           .ForMember(dest => dest.UrlHandle, opt => opt.Ignore());
+    
 
             /// BlogCategory entity → BlogCategoryDto (response)
             CreateMap<BlogCategory, CategoryPostDto>();

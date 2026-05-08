@@ -67,7 +67,7 @@ public class CategoryPostService : ApplicationService, ICategoryPostService
 
    
     // Update category
-    public async Task<CategoryPostDto> UpdateCategoryAsync(CreateCategoryPostDto category)
+    public async Task<CategoryPostDto> UpdateCategoryAsync(UpdateCategoryPostDto category)
     {
 
         var entity = _mapper.Map<BlogCategory>(category);

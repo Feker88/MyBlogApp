@@ -18,10 +18,12 @@ namespace CodePulse.Application.Mappers
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
 
             ///UpdatelogPostDTO --> BlogPost Entities
-            /// Ignore timestamps — only Id comes from the DTO
+            /// Ignore timestamps , urlHandle, Author — only Id comes from the DTO
             CreateMap<UpdateBlogPostDTO, BlogPost>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UrlHandle, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Author, opt => opt.Ignore());
 
             ///BlogPost ENtities --> BlogPostDto FUll response 
             CreateMap<BlogPost, BlogPostDTO>();
