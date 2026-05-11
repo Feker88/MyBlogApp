@@ -2,4 +2,5 @@
   <Project Path="CodePulse.API/CodePulse.API.csproj" />
   <Project Path="CodePulse.Application/CodePulse.Application.csproj" />
   <Project Path="CodePulse.Domain/CodePulse.Domain.csproj" />
+  <Project Path="CodePulse.Infrastructure/CodePulse.Infrastructure.csproj" Id="a87fcef8-b5de-4007-802c-99cb52b5f392" />
 </Solution>

@@ -99,6 +99,12 @@ public class BlogPost : BaseEntity
         }
     }
 
+    // Relationships 
+
+    public Guid CategoryId { get; set; }                 
+    public BlogCategory? Category { get; set; }
+
+
     private bool IsValidUrlHandle(string urlHandle)
     {
         // URL-friendly validation: alphanumeric, hyphens, and underscores only
