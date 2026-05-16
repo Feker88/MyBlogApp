@@ -1,0 +1,33 @@
+﻿using CodePulse.Application.Interfaces;
+using CodePulse.Domain.Repositories;
+using CodePulse.Infrastructure.Data;
+using CodePulse.Infrastructure.Repositories;
+using CodePulse.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CodePulse.Infrastructure;
+
+public static class InfrastructureServiceExtensions
+{
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        // ─── DbContext ───
+        services.AddDbContext<AppDBContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("CodePulseDb")));
+
+        // ─── Repositories ───
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        // ─── UnitOfWork ───
+        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+
+        return services;
+    }
+}

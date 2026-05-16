@@ -4,13 +4,7 @@ using System.Text.RegularExpressions;
 
 public class BlogPost : BaseEntity
 {
-    private string title = string.Empty;
-    private string shortDescription = string.Empty;
-    private string content = string.Empty;
-    private string urlHandle = string.Empty;
-    private string featureImageUrl = string.Empty;
-    private string author = string.Empty;
-    private bool isVisible;
+
     private bool isCreated;
    
 
@@ -19,83 +13,95 @@ public class BlogPost : BaseEntity
         isCreated = false;
     }
 
+    //public string Title
+    //{
+    //    get => title;
+    //    set
+    //    {
+    //        if (string.IsNullOrWhiteSpace(value) || value.Length < 3 || value.Length > 200)
+    //            throw new ArgumentException("Title must not be empty (min 3 chars, max 200).");
+    //        title = value;
+    //    }
+    //}
+
     public string Title
     {
-        get => title;
-        set
+        get;
+        set 
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length < 3 || value.Length > 200)
                 throw new ArgumentException("Title must not be empty (min 3 chars, max 200).");
-            title = value;
+            field = value;
         }
     }
 
+
     public string ShortDescription
     {
-        get => shortDescription;
+        get;
         set
         {
             if (value?.Length > 500)
                 throw new ArgumentException("ShortDescription must not be empty (max 500).");
-            shortDescription = value;
+            field = value;
         }
     }
 
     public string Content
     {
-        get => content;
+        get;
         set
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length < 50)
                 throw new ArgumentException("Content must not be empty (min 50 chars).");
-            content = value;
+            field = value;
         }
     }
 
     public string UrlHandle
     {
-        get => urlHandle;
+        get;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("UrlHandle must not be empty.");
             if (!IsValidUrlHandle(value))
                 throw new ArgumentException("UrlHandle must be URL-friendly (alphanumeric, hyphens, and underscores only).");
-            urlHandle = value;
+            field = value;
         }
     }
 
     public string FeatureImageUrl
     {
-        get => featureImageUrl;
+        get;
         set
         {
             if (!string.IsNullOrWhiteSpace(value) && !IsValidUrl(value))
                 throw new ArgumentException("FeatureImageUrl must be a valid URL format or empty.");
-            featureImageUrl = value ?? string.Empty;
+           field= value ?? string.Empty;
         }
     }
 
     public string Author
     {
-        get => author;
+        get;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Author must not be empty.");
-            author = value;
+            field = value;
         }
     }
 
 
     public bool IsVisible
     {
-        get => isVisible;
+        get;
         set
         {
-            if (value && string.IsNullOrWhiteSpace(content))
+            if (value && string.IsNullOrWhiteSpace(Content))
                 throw new InvalidOperationException("Cannot publish blog post. Content is required.");
-            isVisible = value;
+           field= value;
         }
     }
 

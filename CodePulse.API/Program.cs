@@ -1,5 +1,7 @@
 using AutoMapper;
+using CodePulse.Application;
 using CodePulse.Application.Mappers;
+using CodePulse.Infrastructure;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json.Serialization;
 
@@ -18,14 +20,19 @@ namespace CodePulse.API
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            // Map controller services 
+            builder.Services.AddControllers();
             //builder.Services.AddEndpointsApiExplorer();
+
+            // ─── Clean single-line registrations ───
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             // Register AutoMapper — scans your Application project for all profiles
             builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(BlogPostMappingProfile).Assembly));
 
-            // Map controller services 
-
-            builder.Services.AddControllers();
+   
             var app = builder.Build();
 
             // ─── Validate AutoMapper configuration at startup ───
