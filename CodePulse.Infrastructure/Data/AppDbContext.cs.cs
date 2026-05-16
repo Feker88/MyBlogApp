@@ -1,9 +1,11 @@
 ﻿using CodePulse.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodePulse.Infrastructure.Data
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<IdentityUser>
     {
 
         public AppDBContext(DbContextOptions option) : base(option)
