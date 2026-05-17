@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CodePulse.Application.Services;
+
 namespace CodePulse.Infrastructure;
 
 public static class InfrastructureServiceExtensions
@@ -76,6 +78,10 @@ public static class InfrastructureServiceExtensions
 
         // ─── UnitOfWork ───
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+
+
+        // ─── Auth service───
+        services.AddScoped<IAuthServices,AuthService>();
 
         return services;
     }

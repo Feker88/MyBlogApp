@@ -20,6 +20,9 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IBlogPostServices, BlogPostServices>();
         services.AddScoped<ICategoryPostService, CategoryPostService>();
 
+        // ─── Authentification───
+        services.AddScoped<IAuthServices, AuthService>();
+
         return services;
     }
 }
