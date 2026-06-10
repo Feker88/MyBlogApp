@@ -15,7 +15,9 @@ namespace CodePulse.Application.Mappers
             CreateMap<CreateBlogPostDTO, BlogPost>()
                 .ForMember(dest=>dest.Id , opt=> opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore()); // ← ignore nav property
+                                                                          // CategoryId maps automatically (same name in DTO and entity);
 
             ///UpdatelogPostDTO --> BlogPost Entities
             /// Ignore timestamps , urlHandle, Author — only Id comes from the DTO
@@ -23,13 +25,15 @@ namespace CodePulse.Application.Mappers
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UrlHandle, opt => opt.Ignore()) 
-                .ForMember(dest => dest.Author, opt => opt.Ignore());
+                .ForMember(dest => dest.Author, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore()); // ← ignore nav property
+                                                                        // CategoryId maps automatically (same name in DTO and entity);
 
             ///BlogPost ENtities --> BlogPostDto FUll response 
-            CreateMap<BlogPost, BlogPostDTO>();
+            CreateMap<BlogPost, BlogPostDTO>().ForMember(dest => dest.CategoryName,opt => opt.MapFrom(src => src.Category != null? src.Category.Name: string.Empty)); 
 
             ///BlogPost ENtities --> BlogPostDto light response 
-            CreateMap<BlogPost, BlogPostSummaryDTO>();
+            CreateMap<BlogPost, BlogPostSummaryDTO>().ForMember(dest => dest.CategoryName,opt => opt.MapFrom(src => src.Category != null? src.Category.Name: string.Empty)); 
 
         }
     }

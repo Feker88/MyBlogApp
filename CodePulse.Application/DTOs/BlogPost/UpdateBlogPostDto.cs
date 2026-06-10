@@ -17,5 +17,7 @@ namespace CodePulse.Application.DTOs.BlogPost
         public required string Content { get; set; } = string.Empty;        
         public string? FeatureImageUrl { get; set; } = string.Empty;        
         public bool IsVisible { get; set; }
+
+        public Guid CategoryId { get; set; }
     }
 }

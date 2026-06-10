@@ -11,6 +11,7 @@ namespace CodePulse.Application.DTOs.CategoryPost
     {
         public required string Name { get; set; } = string.Empty;
         public required string UrlHandle { get; set; } = string.Empty;
+        public int PostCount { get; set; }            
 
     }
 }
